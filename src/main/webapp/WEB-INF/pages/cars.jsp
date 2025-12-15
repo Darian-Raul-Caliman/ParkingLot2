@@ -5,20 +5,21 @@
 <t:pageTemplate pageTitle="Cars">
     <h1>Cars</h1>
 
-    <%--
-        1. Form Wrapper: Wraps the buttons and the list.
-           Action points to the Cars servlet (POST method).
-    --%>
     <form method="POST" action="${pageContext.request.contextPath}/Cars">
 
-            <%-- Buttons: Add Car and the new Delete Cars button --%>
-        <a href="${pageContext.request.contextPath}/AddCar" class="btn btn-primary btn-lg">Add Car</a>
-        <button class="btn btn-danger btn-lg" type="submit">Delete Cars</button>
+        <c:if test="${pageContext.request.isUserInRole('WRITE_CARS')}">
+            <a href="${pageContext.request.contextPath}/AddCar" class="btn btn-primary btn-lg">Add Car</a>
+            <button class="btn btn-danger btn-lg" type="submit">Delete Cars</button>
+        </c:if>
 
         <div class="container text-center mt-3">
-                <%-- Header Row --%>
             <div class="row fw-bold">
-                <div class="col">Select</div> <%-- Header for checkboxes --%>
+
+
+                <c:if test="${pageContext.request.isUserInRole('WRITE_CARS')}">
+                    <div class="col">Select</div>
+                </c:if>
+
                 <div class="col">License Plate</div>
                 <div class="col">Parking Spot</div>
                 <div class="col">Owner</div>
@@ -27,16 +28,14 @@
 
             <c:forEach var="car" items="${cars}">
                 <div class="row border-bottom py-2">
-                        <%--
-                            2. Checkbox Column:
-                               name="car_ids" (plural) allows multiple values to be sent.
-                               value="${car.id}" sends the specific ID of the checked car.
-                        --%>
-                    <div class="col align-self-center">
-                        <input type="checkbox" name="car_ids" value="${car.id}" />
-                    </div>
 
-                        <%-- Existing Data Columns --%>
+
+                    <c:if test="${pageContext.request.isUserInRole('WRITE_CARS')}">
+                        <div class="col align-self-center">
+                            <input type="checkbox" name="car_ids" value="${car.id}" />
+                        </div>
+                    </c:if>
+
                     <div class="col align-self-center">
                             ${car.licensePlate}
                     </div>
@@ -47,9 +46,11 @@
                             ${car.ownerName}
                     </div>
 
-                        <%-- Edit Button Column --%>
                     <div class="col">
-                        <a class="btn btn-secondary" href="${pageContext.request.contextPath}/EditCar?id=${car.id}">Edit Car</a>
+
+                        <c:if test="${pageContext.request.isUserInRole('WRITE_CARS')}">
+                            <a class="btn btn-secondary" href="${pageContext.request.contextPath}/EditCar?id=${car.id}">Edit Car</a>
+                        </c:if>
                     </div>
                 </div>
             </c:forEach>

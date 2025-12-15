@@ -11,6 +11,8 @@ import org.parkinglotapp.parkinglotapp.ejb.UserBean;
 import java.io.IOException;
 import java.util.List;
 
+// Task: Only allow access if the user has the WRITE_CARS usergroup
+@ServletSecurity(value = @HttpConstraint(rolesAllowed = {"WRITE_CARS"}))
 @WebServlet(name = "AddCar", value = "/AddCar")
 public class AddCar extends HttpServlet {
 
