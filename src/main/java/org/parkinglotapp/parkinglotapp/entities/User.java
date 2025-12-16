@@ -1,9 +1,13 @@
 package org.parkinglotapp.parkinglotapp.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -12,14 +16,33 @@ public class User {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "password")
+    @NotBlank(message = "Password cannot be empty")
+    @Size(min = 6, message = "Password must be at least 6 characters")
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "email")
+    @NotBlank(message = "Email cannot be empty")
+    @Email(message = "Email must be valid")
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "username")
+    @NotBlank(message = "Username cannot be empty")
+    @Size(min = 4, max = 100, message = "Username must be between 4 and 100 characters")
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
+
+    @OneToMany(mappedBy = "owner", orphanRemoval = true)
+    private List<Car> cars = new ArrayList<>();
+
+    // --- Getters and Setters ---
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getPassword() {
         return password;
@@ -44,17 +67,6 @@ public class User {
     public void setUsername(String username) {
         this.username = username;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @OneToMany(mappedBy = "owner", orphanRemoval = true)
-    private List<Car> cars = new ArrayList<>();
 
     public List<Car> getCars() {
         return cars;

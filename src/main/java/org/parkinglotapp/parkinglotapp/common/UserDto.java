@@ -11,15 +11,18 @@ public class UserDto {
         this.email = email;
     }
 
-
-    public Long getId() { // Fără asta, ${user.id} crapă pagina
+    public Long getId() {
         return id;
     }
 
-    public String getUsername() { // Fără asta, ${user.username} crapă pagina
+    public String getUsername() {
         return username;
     }
 
+    // If your JSP specifically uses ${user.name}, add this helper:
+    public String getName() {
+        return username;
+    }
     public String getEmail() {
         return email;
     }

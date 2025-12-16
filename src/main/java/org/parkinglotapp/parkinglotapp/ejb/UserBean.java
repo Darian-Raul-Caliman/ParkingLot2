@@ -36,14 +36,6 @@ public class UserBean {
         }
     }
 
-    public Collection<String>findUsernamesByUserIds(Collection<Long> userIds){
-        List<String> usernames =
-                entityManager.createQuery("SELECT u.username FROM User u WHERE u.id IN :userIds", String.class)
-                        .setParameter("userIds", userIds)
-                        .getResultList();
-        return usernames;
-    }
-
     public List<UserDto> copyUsersToDto(List<User> users){
         List<UserDto> userDtos = new ArrayList<>();
         for (User user : users){
@@ -77,6 +69,29 @@ public class UserBean {
         }
     }
 
+    public Collection<String> findUsernameByUserIds(Collection<Long> userIds) {
+        if (userIds == null || userIds.isEmpty()) {
+            return java.util.Collections.emptyList();
+        }
 
+        return entityManager.createQuery("SELECT u.username FROM User u WHERE u.id IN :userIds", String.class)
+                .setParameter("userIds", userIds)
+                .getResultList();
+    }
 
+    public void updateUser(Long userId, String username, String email, String password) {
+        User user = entityManager.find(User.class, userId);
+
+        user.setUsername(username);
+        user.setEmail(email);
+
+        if (password != null && !password.trim().isEmpty()) {
+            user.setPassword(password);
+        }
+    }
+
+    public UserDto findById(Long id) {
+        User user = entityManager.find(User.class, id);
+        return new UserDto(user.getId(), user.getUsername(), user.getEmail());
+    }
 }

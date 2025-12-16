@@ -18,7 +18,6 @@ import java.util.logging.Logger;
 @Stateless
 public class CarsBean {
     private static final Logger LOG = Logger.getLogger(CarsBean.class.getName());
-    int a;
 
     @PersistenceContext
     EntityManager entityManager;
@@ -63,7 +62,7 @@ public class CarsBean {
                 return null;
             }
 
-            // Handle owner name safely (in case owner is null)
+
             String ownerName = (car.getOwner() != null) ? car.getOwner().getUsername() : null;
 
             return new CarDto(car.getId(), car.getLicensePlate(), car.getParkingSpot(), ownerName);
@@ -86,9 +85,6 @@ public class CarsBean {
         car.setOwner(user);
     }
 
-
-
-
     public void deleteCarsByIds(Collection<Long> carIds){
         LOG.info("deleteCarsByIds");
         for(Long carId : carIds){
@@ -96,7 +92,6 @@ public class CarsBean {
             entityManager.remove(car);
         }
     }
-
     public void addPhotoToCar(Long carId, String filename, String fileType, byte[] fileContent) {
         LOG.info("addPhotoToCar");
         CarPhoto photo = new CarPhoto();

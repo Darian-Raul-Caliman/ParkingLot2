@@ -1,6 +1,7 @@
 package org.parkinglotapp.parkinglotapp.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "usergroups")
@@ -10,8 +11,14 @@ public class UserGroup {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+    @NotBlank(message = "Username cannot be empty")
+    @Column(name = "username", nullable = false)
     private String username;
 
+
+    @NotBlank(message = "User group cannot be empty")
+    @Column(name = "user_group", nullable = false)
     private String userGroup;
 
     public UserGroup() {

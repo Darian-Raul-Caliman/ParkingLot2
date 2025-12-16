@@ -21,13 +21,12 @@ public class CarPhotos extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Integer carId = Integer.parseInt(request.getParameter("id"));
         CarPhotoDto photo = carsBean.findPhotoByCarId(carId);
-
-        if (photo != null) {
+        if(photo!=null){
             response.setContentType(photo.getFileType());
-            response.setContentLength(photo.getFileContent());
+            response.setContentLength(photo.getFileContent().length);
             response.getOutputStream().write(photo.getFileContent());
-        } else {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND); // Error 404
+        } else{
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 }

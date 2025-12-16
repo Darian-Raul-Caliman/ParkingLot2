@@ -1,17 +1,35 @@
 package org.parkinglotapp.parkinglotapp.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "car_photos")
 public class CarPhoto {
-@Id
-    Long id;
- String filename;
- String fileType;
- byte[] fileContent;
- Car car;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    private String filename;
+
+    private String fileType;
+
+    @Lob
+    private byte[] fileContent;
+
+    @OneToOne
+    @JoinColumn(name = "car_id", unique = true)
+    private Car car;
+
+    public CarPhoto() {
+    }
+
+    public CarPhoto(String filename, String fileType, byte[] fileContent) {
+        this.filename = filename;
+        this.fileType = fileType;
+        this.fileContent = fileContent;
+    }
+
 
     public Long getId() {
         return id;
@@ -44,7 +62,7 @@ public class CarPhoto {
     public void setFileContent(byte[] fileContent) {
         this.fileContent = fileContent;
     }
-    @OneToOne
+
     public Car getCar() {
         return car;
     }
@@ -52,7 +70,4 @@ public class CarPhoto {
     public void setCar(Car car) {
         this.car = car;
     }
-
-
-
 }
