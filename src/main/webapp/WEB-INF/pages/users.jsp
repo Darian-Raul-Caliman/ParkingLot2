@@ -16,4 +16,11 @@
             </div>
         </c:forEach>
     </div>
+    <c: if test="${not empty invoices}">
+        <h2>Invoices</h2>
+        <c:forEach var="username" items="${invoices}" varStatus="status">
+            ${status.index + 1}. ${username}
+            <br/>
+        </c:forEach>
+    </c:>
 </t:pageTemplate>

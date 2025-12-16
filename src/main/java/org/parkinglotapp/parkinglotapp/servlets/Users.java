@@ -6,9 +6,12 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import org.parkinglotapp.parkinglotapp.common.UserDto;
+import org.parkinglotapp.parkinglotapp.ejb.InvoiceBean;
 import org.parkinglotapp.parkinglotapp.ejb.UserBean;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @DeclareRoles({"READ_USERS", "WRITE_USERS"})
@@ -22,15 +25,30 @@ import java.util.List;
 public class Users extends HttpServlet {
     @Inject
     UserBean userBean;
+    @Inject
+    private InvoiceBean invoiceBean;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<UserDto> users = userBean.findAllUsers();
         request.setAttribute("users", users);
+        if(!invoiceBean.getUserIds().isEmpty()){
+            Collection<String> usernames = userBean.findUsernamesByUserIds(invoiceBean.getUserIds());
+            request.setAttribute("usernames", usernames);
+        }
         request.getRequestDispatcher("/WEB-INF/pages/users.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String[] userIdsAsString = request.getParameterValues("user_Ids");
+        if(userIdsAsString != null){
+            List<Long> userIds = new ArrayList<>();
+            for(String userIdasString : userIdsAsString){
+                userIds.add(Long.parseLong(userIdasString));
+            }
+            InvoiceBean.getUserIds().addAll(userIds);
+        }
+        response.sendRedirect(request.getContextPath() + "/Users");
     }
 }
